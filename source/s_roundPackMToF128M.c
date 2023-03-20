@@ -40,6 +40,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "internals.h"
 #include "softfloat.h"
 
+#define MAXSIG_V3 0x0001FFFF
+#define MAXSIG_V2 0xFFFFFFFF
+#define MAXSIG_V1 0xFFFFFFFF
+#define MAXSIG_V0 0xFFFFFFFF
+
 void
  softfloat_roundPackMToF128M(
      bool sign, int32_t exp, uint32_t *extSigPtr, uint32_t *zWPtr )
@@ -49,7 +54,7 @@ void
     uint32_t sigExtra;
     bool doIncrement, isTiny;
     static const uint32_t maxSig[4] =
-        INIT_UINTM4( 0x0001FFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF );
+        { MAXSIG_V3, MAXSIG_V2, MAXSIG_V1, MAXSIG_V0 };
     uint32_t ui, uj;
 
     /*------------------------------------------------------------------------
@@ -175,4 +180,3 @@ void
     zWPtr[indexWordHi( 4 )] = packToF128UI96( sign, exp, ui );
 
 }
-

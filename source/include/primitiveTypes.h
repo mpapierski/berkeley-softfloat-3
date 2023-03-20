@@ -38,6 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define primitiveTypes_h 1
 
 #include <stdint.h>
+#include <stddef.h>
 
 #ifdef SOFTFLOAT_FAST_INT64
 
@@ -57,29 +58,29 @@ struct uint128_extra { struct uint128 v; uint64_t extra; };
 | These macros are used to isolate the differences in word order between big-
 | endian and little-endian platforms.
 *----------------------------------------------------------------------------*/
+
+size_t c2rust_indexWord(size_t total, size_t n);
+size_t c2rust_indexWordLo(size_t total);
+size_t c2rust_indexWordHi(size_t total);
+size_t c2rust_indexMultiword(size_t total, size_t m, size_t n);
+size_t c2rust_indexMultiwordHi(size_t total, size_t n);
+size_t c2rust_indexMultiwordLo(size_t total, size_t n);
+size_t c2rust_indexMultiwordHiBut(size_t total, size_t n);
+size_t c2rust_indexMultiwordLoBut(size_t total, size_t n);
+
 #ifdef LITTLEENDIAN
 #define wordIncr 1
-#define indexWord( total, n ) (n)
-#define indexWordHi( total ) ((total) - 1)
-#define indexWordLo( total ) 0
-#define indexMultiword( total, m, n ) (n)
-#define indexMultiwordHi( total, n ) ((total) - (n))
-#define indexMultiwordLo( total, n ) 0
-#define indexMultiwordHiBut( total, n ) (n)
-#define indexMultiwordLoBut( total, n ) 0
-#define INIT_UINTM4( v3, v2, v1, v0 ) { v0, v1, v2, v3 }
 #else
 #define wordIncr -1
-#define indexWord( total, n ) ((total) - 1 - (n))
-#define indexWordHi( total ) 0
-#define indexWordLo( total ) ((total) - 1)
-#define indexMultiword( total, m, n ) ((total) - 1 - (m))
-#define indexMultiwordHi( total, n ) 0
-#define indexMultiwordLo( total, n ) ((total) - (n))
-#define indexMultiwordHiBut( total, n ) 0
-#define indexMultiwordLoBut( total, n ) (n)
-#define INIT_UINTM4( v3, v2, v1, v0 ) { v3, v2, v1, v0 }
 #endif
 
-#endif
+#define indexWord c2rust_indexWord
+#define indexWordLo c2rust_indexWordLo
+#define indexWordHi c2rust_indexWordHi
+#define indexMultiword c2rust_indexMultiword
+#define indexMultiwordHi c2rust_indexMultiwordHi
+#define indexMultiwordLo c2rust_indexMultiwordLo
+#define indexMultiwordHiBut c2rust_indexMultiwordHiBut
+#define indexMultiwordLoBut c2rust_indexMultiwordLoBut
 
+#endif
